@@ -208,6 +208,7 @@ class UVServiceWorker extends Ultraviolet.EventEmitter {
                                 ultraviolet.clientScript,
                                 ultraviolet.configScript,
                                 ultraviolet.handlerScript,
+                                ...[ultraviolet.toolbarScript].filter((f) => !!f),
                             ]
                                 .map((script) => JSON.stringify(script))
                                 .join(',');

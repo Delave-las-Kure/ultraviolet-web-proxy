@@ -61,6 +61,7 @@ class Ultraviolet {
         this.meta.origin ||= '';
         this.bundleScript = options.bundle || '/uv.bundle.js';
         this.handlerScript = options.handler || '/uv.handler.js';
+        this.toolbarScript = options.toolbar || '';
         this.clientScript =
             options.client ||
             (options.bundle &&
