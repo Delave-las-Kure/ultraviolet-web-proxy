@@ -1,12 +1,12 @@
 {
-    "name": "@titaniumnetwork-dev/ultraviolet",
+    "name": "@fieron/ultraviolet-web-proxy",
     "version": "2.0.0",
     "description": "Highly sophisticated proxy used for evading internet censorship or accessing websites in a controlled sandbox using the power of service-workers and more!",
     "main": "lib/index.cjs",
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "https://github.com/titaniumnetwork-dev/Ultraviolet.git"
+        "url": "https://github.com/Delave-las-Kure/ultraviolet-web-proxy.git"
     },
     "files": [
         "dist",
