@@ -212,13 +212,15 @@ export function createJsInject(
     bareURL = '',
     bareData = {},
     cookies = '',
-    referrer = ''
+    referrer = '',
+    env = {}
 ) {
     return (
         `self.__uv$bareData = ${JSON.stringify(bareData)};` +
         `self.__uv$cookies = ${JSON.stringify(cookies)};` +
         `self.__uv$referrer = ${JSON.stringify(referrer)};` +
-        `self.__uv$bareURL = ${JSON.stringify(bareURL)}; `
+        `self.__uv$bareURL = ${JSON.stringify(bareURL)}; ` +
+        `self.__uv$env = ${JSON.stringify(env)}; `
     );
 }
 
@@ -227,10 +229,12 @@ export function createHtmlInject(
     bundleScript,
     clientScript,
     configScript,
+    toolbarAssets,
     bareURL,
     bareData,
     cookies,
-    referrer
+    referrer,
+    env
 ) {
     return [
         {
@@ -239,7 +243,7 @@ export function createHtmlInject(
             childNodes: [
                 {
                     nodeName: '#text',
-                    value: createJsInject(bareURL, bareData, cookies, referrer),
+                    value: createJsInject(bareURL, bareData, cookies, referrer, env),
                 },
             ],
             attrs: [
@@ -290,6 +294,39 @@ export function createHtmlInject(
                 },
             ],
         },
+        ...(toolbarAssets && toolbarAssets.script ? [{
+            tagName: 'script',
+            nodeName: 'script',
+            childNodes: [],
+            attrs: [
+                { name: 'src', value: toolbarAssets.script, skip: true },
+                {
+                    name: '__uv-script',
+                    value: '1',
+                    skip: true,
+                },
+                {
+                    name: 'type',
+                    value: 'module',
+                    skip: true,
+                },
+            ],
+        }] : []),
+        ...(toolbarAssets && toolbarAssets.style ? [{
+            tagName: 'link',
+            nodeName: 'link',
+            childNodes: [],
+            attrs: [
+                { name: 'href', value: toolbarAssets.style, skip: true },
+                { name: 'rel', value: "stylesheet", skip: true },
+                {
+                    name: '__uv-style',
+                    value: '1',
+                    skip: true,
+                },
+
+            ],
+        }] : []),
         {
             tagName: 'script',
             nodeName: 'script',

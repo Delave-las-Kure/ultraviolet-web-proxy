@@ -208,7 +208,7 @@ class UVServiceWorker extends Ultraviolet.EventEmitter {
                                 ultraviolet.clientScript,
                                 ultraviolet.configScript,
                                 ultraviolet.handlerScript,
-                                ...[ultraviolet.toolbarScript].filter((f) => !!f),
+                                ultraviolet.toolbarAssets.script,
                             ]
                                 .map((script) => JSON.stringify(script))
                                 .join(',');
@@ -249,6 +249,7 @@ class UVServiceWorker extends Ultraviolet.EventEmitter {
                                         ultraviolet.bundleScript,
                                         ultraviolet.clientScript,
                                         ultraviolet.configScript,
+                                        ultraviolet.toolbarAssets,
                                         this.address,
                                         this.bareClient.manfiest,
                                         ultraviolet.cookie.serialize(
@@ -256,7 +257,8 @@ class UVServiceWorker extends Ultraviolet.EventEmitter {
                                             ultraviolet.meta,
                                             true
                                         ),
-                                        request.referrer
+                                        request.referrer,
+                                        ultraviolet.env
                                     ),
                                 }
                             );

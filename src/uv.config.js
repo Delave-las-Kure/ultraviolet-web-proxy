@@ -8,6 +8,7 @@ self.__uv$config = {
     client: '/uv.client.js',
     bundle: '/uv.bundle.js',
     config: '/uv.config.js',
-    toolbar: '',
+    toolbar: null,
+    env: null,
     sw: '/uv.sw.js',
 };
