@@ -606,15 +606,20 @@ function __uvHook(window) {
         'href',
         {
             get: (target, that) => {
+                if (that.hasAttribute(that.__uv.ignoreAttr))
+                    return target.call(that);
                 return __uv.sourceUrl(target.call(that));
             },
             set: (target, that, [val]) => {
-                client.element.setAttribute.call(
-                    that,
-                    __uv.attributePrefix + '-attr-href',
-                    val
-                );
-                target.call(that, __uv.rewriteUrl(val));
+                if (that.hasAttribute(that.__uv.ignoreAttr)) target.call(that, val);
+                else {
+                    client.element.setAttribute.call(
+                        that,
+                        __uv.attributePrefix + '-attr-href',
+                        val
+                    );
+                    target.call(that, __uv.rewriteUrl(val));
+                }
             },
         }
     );
@@ -635,27 +640,32 @@ function __uvHook(window) {
         'src',
         {
             get: (target, that) => {
+                if (that.hasAttribute(that.__uv.ignoreAttr))
+                    return target.call(that);
                 return __uv.sourceUrl(target.call(that));
             },
             set: (target, that, [val]) => {
-                if (
-                    new String(val).toString().trim().startsWith('blob:') &&
-                    that instanceof HTMLMediaElement
-                ) {
+                if (that.hasAttribute(that.__uv.ignoreAttr)) target.call(that, val);
+                else {
+                    if (
+                        new String(val).toString().trim().startsWith('blob:') &&
+                        that instanceof HTMLMediaElement
+                    ) {
+                        client.element.setAttribute.call(
+                            that,
+                            __uv.attributePrefix + '-attr-src',
+                            val
+                        );
+                        return target.call(that, __uv.blobUrls.get(val) || val);
+                    }
+    
                     client.element.setAttribute.call(
                         that,
                         __uv.attributePrefix + '-attr-src',
                         val
                     );
-                    return target.call(that, __uv.blobUrls.get(val) || val);
+                    target.call(that, __uv.rewriteUrl(val));
                 }
-
-                client.element.setAttribute.call(
-                    that,
-                    __uv.attributePrefix + '-attr-src',
-                    val
-                );
-                target.call(that, __uv.rewriteUrl(val));
             },
         }
     );

@@ -79,6 +79,7 @@ class Ultraviolet {
         this.master = '__uv';
         this.dataPrefix = '__uv$';
         this.attributePrefix = '__uv';
+        this.ignoreAttr = '__uv-ignore';
         this.createHtmlInject = createHtmlInject;
         this.createJsInject = createJsInject;
         this.attrs = {

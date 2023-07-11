@@ -11,6 +11,8 @@ export function attributes(ctx, meta = ctx.meta) {
     const origPrefix = attributePrefix + '-attr-';
 
     html.on('attr', (attr, type) => {
+        if (attr.node && attr.node.hasAttribute && attr.node.hasAttribute(ctx.ignoreAttr))  return;
+        
         if (
             attr.node.tagName === 'base' &&
             attr.name === 'href' &&
