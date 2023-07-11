@@ -213,7 +213,7 @@ class UVServiceWorker extends Ultraviolet.EventEmitter {
                                 .join(',');
                             responseCtx.body = `if (!self.__uv && self.importScripts) { ${ultraviolet.createJsInject(
                                 this.address,
-                                this.bareClient.manfiest,
+                                this.bareClient.manifest,
                                 ultraviolet.cookie.serialize(
                                     cookies,
                                     ultraviolet.meta,
@@ -250,7 +250,7 @@ class UVServiceWorker extends Ultraviolet.EventEmitter {
                                         ultraviolet.configScript,
                                         ultraviolet.toolbarAssets,
                                         this.address,
-                                        this.bareClient.manfiest,
+                                        this.bareClient.manifest,
                                         ultraviolet.cookie.serialize(
                                             cookies,
                                             ultraviolet.meta,
