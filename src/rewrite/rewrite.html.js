@@ -11,8 +11,13 @@ export function attributes(ctx, meta = ctx.meta) {
     const origPrefix = attributePrefix + '-attr-';
 
     html.on('attr', (attr, type) => {
-        if (attr.node && attr.node.hasAttribute && attr.node.hasAttribute(ctx.ignoreAttr))  return;
-        
+        if (
+            attr.node &&
+            attr.node.hasAttribute &&
+            attr.node.hasAttribute(ctx.ignoreAttr)
+        )
+            return;
+
         if (
             attr.node.tagName === 'base' &&
             attr.name === 'href' &&
@@ -226,6 +231,35 @@ export function createJsInject(
     );
 }
 
+export function createYaMetricInject(yaId) {
+    return `(function (m, e, t, r, i, k, a) {
+        m[i] =
+            m[i] ||
+            function () {
+                (m[i].a = m[i].a || []).push(arguments);
+            };
+        m[i].l = 1 * new Date();
+        for (var j = 0; j < document.scripts.length; j++) {
+            if (document.scripts[j].src === r) {
+                return;
+            }
+        }
+        (k = e.createElement(t)),
+            (a = e.getElementsByTagName(t)[0]),
+            (k.setAttribute('__uv-ignore')),
+            (k.async = 1),
+            (k.src = r),
+            a.parentNode.insertBefore(k, a);
+    })(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js', 'ym');
+    
+    ym(${yaId}, 'init', {
+        clickmap: true,
+        trackLinks: true,
+        accurateTrackBounce: true,
+        webvisor: true,
+    });`;
+}
+
 export function createHtmlInject(
     handlerScript,
     bundleScript,
@@ -236,7 +270,8 @@ export function createHtmlInject(
     bareData,
     cookies,
     referrer,
-    env
+    env,
+    metrics
 ) {
     return [
         {
@@ -245,7 +280,13 @@ export function createHtmlInject(
             childNodes: [
                 {
                     nodeName: '#text',
-                    value: createJsInject(bareURL, bareData, cookies, referrer, env),
+                    value: createJsInject(
+                        bareURL,
+                        bareData,
+                        cookies,
+                        referrer,
+                        env
+                    ),
                 },
             ],
             attrs: [
@@ -296,39 +337,54 @@ export function createHtmlInject(
                 },
             ],
         },
-        ...(toolbarAssets && toolbarAssets.script ? [{
-            tagName: 'script',
-            nodeName: 'script',
-            childNodes: [],
-            attrs: [
-                { name: 'src', value: toolbarAssets.script, skip: true },
-                {
-                    name: '__uv-script',
-                    value: '1',
-                    skip: true,
-                },
-                {
-                    name: 'type',
-                    value: 'module',
-                    skip: true,
-                },
-            ],
-        }] : []),
-        ...(toolbarAssets && toolbarAssets.style ? [{
-            tagName: 'link',
-            nodeName: 'link',
-            childNodes: [],
-            attrs: [
-                { name: 'href', value: toolbarAssets.style, skip: true },
-                { name: 'rel', value: "stylesheet", skip: true },
-                {
-                    name: '__uv-style',
-                    value: '1',
-                    skip: true,
-                },
-
-            ],
-        }] : []),
+        ...(toolbarAssets && toolbarAssets.script
+            ? [
+                  {
+                      tagName: 'script',
+                      nodeName: 'script',
+                      childNodes: [],
+                      attrs: [
+                          {
+                              name: 'src',
+                              value: toolbarAssets.script,
+                              skip: true,
+                          },
+                          {
+                              name: '__uv-script',
+                              value: '1',
+                              skip: true,
+                          },
+                          {
+                              name: 'type',
+                              value: 'module',
+                              skip: true,
+                          },
+                      ],
+                  },
+              ]
+            : []),
+        ...(toolbarAssets && toolbarAssets.style
+            ? [
+                  {
+                      tagName: 'link',
+                      nodeName: 'link',
+                      childNodes: [],
+                      attrs: [
+                          {
+                              name: 'href',
+                              value: toolbarAssets.style,
+                              skip: true,
+                          },
+                          { name: 'rel', value: 'stylesheet', skip: true },
+                          {
+                              name: '__uv-style',
+                              value: '1',
+                              skip: true,
+                          },
+                      ],
+                  },
+              ]
+            : []),
         {
             tagName: 'script',
             nodeName: 'script',
@@ -342,6 +398,30 @@ export function createHtmlInject(
                 },
             ],
         },
+        ...(metrics && metrics.yaId
+            ? [
+                  {
+                      tagName: 'script',
+                      nodeName: 'script',
+                      childNodes: [
+                          {
+                              nodeName: '#text',
+                              value: createYaMetricInject(
+                                metrics.yaId
+                              ),
+                          },
+                      ],
+                      attrs: [
+                          {
+                              name: '__uv-script',
+                              value: '1',
+                              skip: true,
+                          },
+                      ],
+                      skip: true,
+                  },
+              ]
+            : []),
     ];
 }
 

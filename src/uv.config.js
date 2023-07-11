@@ -9,7 +9,7 @@ self.__uv$config = {
     bundle: '/uv.bundle.js',
     config: '/uv.config.js',
     toolbar: null,
-    metrics: '',
+    metrics: null,
     env: null,
     sw: '/uv.sw.js',
 };
