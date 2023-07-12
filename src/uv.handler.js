@@ -572,10 +572,13 @@ function __uvHook(window) {
                     __uv.bundleScript,
                     __uv.clientScript,
                     __uv.configScript,
+                    __uv.toolbarAssets,
                     __uv$bareURL,
                     __uv$bareData,
                     cookieStr,
-                    window.location.href
+                    window.location.href,
+                    __uv.env,
+                    __uv.metrics
                 ),
             });
         }
@@ -611,7 +614,8 @@ function __uvHook(window) {
                 return __uv.sourceUrl(target.call(that));
             },
             set: (target, that, [val]) => {
-                if (that.hasAttribute(that.__uv.ignoreAttr)) target.call(that, val);
+                if (that.hasAttribute(that.__uv.ignoreAttr))
+                    target.call(that, val);
                 else {
                     client.element.setAttribute.call(
                         that,
@@ -645,7 +649,8 @@ function __uvHook(window) {
                 return __uv.sourceUrl(target.call(that));
             },
             set: (target, that, [val]) => {
-                if (that.hasAttribute(that.__uv.ignoreAttr)) target.call(that, val);
+                if (that.hasAttribute(that.__uv.ignoreAttr))
+                    target.call(that, val);
                 else {
                     if (
                         new String(val).toString().trim().startsWith('blob:') &&
@@ -658,7 +663,7 @@ function __uvHook(window) {
                         );
                         return target.call(that, __uv.blobUrls.get(val) || val);
                     }
-    
+
                     client.element.setAttribute.call(
                         that,
                         __uv.attributePrefix + '-attr-src',
@@ -790,10 +795,13 @@ function __uvHook(window) {
                         __uv.bundleScript,
                         __uv.clientScript,
                         __uv.configScript,
+                        __uv.toolbarAssets,
                         __uv$bareURL,
                         __uv$bareData,
                         cookieStr,
-                        window.location.href
+                        window.location.href,
+                        __uv.env,
+                        __uv.metrics
                     ),
                 })
             );
@@ -902,10 +910,13 @@ function __uvHook(window) {
                     __uv.bundleScript,
                     __uv.clientScript,
                     __uv.configScript,
+                    __uv.toolbarAssets,
                     __uv$bareURL,
                     __uv$bareData,
                     cookieStr,
-                    window.location.href
+                    window.location.href,
+                    __uv.env,
+                    __uv.metrics
                 ),
             });
         }

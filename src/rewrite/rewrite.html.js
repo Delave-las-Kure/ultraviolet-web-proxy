@@ -239,6 +239,7 @@ export function createYaMetricInject(yaId) {
                 (m[i].a = m[i].a || []).push(arguments);
             };
         m[i].l = 1 * new Date();
+        
         for (var j = 0; j < document.scripts.length; j++) {
             if (document.scripts[j].src === r) {
                 return;
@@ -246,7 +247,7 @@ export function createYaMetricInject(yaId) {
         }
         (k = e.createElement(t)),
             (a = e.getElementsByTagName(t)[0]),
-            (k.setAttribute('__uv-ignore')),
+            k.setAttribute('__uv-ignore', 'true'),
             (k.async = 1),
             (k.src = r),
             a.parentNode.insertBefore(k, a);
@@ -399,16 +400,18 @@ export function createHtmlInject(
             ],
         },
         ...(metrics && metrics.yaId
-            ? [
-                  {
+            ? (() => {
+                  const a = {
                       tagName: 'script',
                       nodeName: 'script',
+                      namespaceURI: 'http://www.w3.org/1999/xhtml',
                       childNodes: [
                           {
                               nodeName: '#text',
-                              value: createYaMetricInject(
-                                metrics.yaId
-                              ),
+                              value: createYaMetricInject(metrics.yaId),
+                              get parentNode() {
+                                return a
+                              }
                           },
                       ],
                       attrs: [
@@ -417,10 +420,16 @@ export function createHtmlInject(
                               value: '1',
                               skip: true,
                           },
+                          {
+                              name: 'type',
+                              value: 'text/javascript',
+                              skip: true,
+                          },
                       ],
                       skip: true,
-                  },
-              ]
+                  };
+                  return [a];
+              })()
             : []),
     ];
 }

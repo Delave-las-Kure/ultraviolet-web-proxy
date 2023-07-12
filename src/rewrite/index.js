@@ -63,6 +63,7 @@ class Ultraviolet {
         this.handlerScript = options.handler || '/uv.handler.js';
         this.toolbarAssets = options.toolbar || null;
         this.env = options.env || null;
+        this.metrics = options.metrics || null;
         this.clientScript =
             options.client ||
             (options.bundle &&

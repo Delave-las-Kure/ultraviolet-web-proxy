@@ -257,7 +257,8 @@ class UVServiceWorker extends Ultraviolet.EventEmitter {
                                             true
                                         ),
                                         request.referrer,
-                                        ultraviolet.env
+                                        ultraviolet.env,
+                                        ultraviolet.metrics
                                     ),
                                 }
                             );
