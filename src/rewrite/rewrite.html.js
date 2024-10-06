@@ -216,18 +216,14 @@ export function injectHead(ctx) {
 }
 
 export function createJsInject(
-    bareURL = '',
-    bareData = {},
     cookies = '',
     referrer = '',
     env = {}
 ) {
     return (
-        `self.__uv$bareData = ${JSON.stringify(bareData)};` +
         `self.__uv$cookies = ${JSON.stringify(cookies)};` +
-        `self.__uv$referrer = ${JSON.stringify(referrer)};` +
-        `self.__uv$bareURL = ${JSON.stringify(bareURL)}; ` +
-        `self.__uv$env = ${JSON.stringify(env)}; `
+        `self.__uv$env = ${JSON.stringify(env)}; ` +
+        `self.__uv$referrer = ${JSON.stringify(referrer)};`
     );
 }
 
@@ -267,8 +263,6 @@ export function createHtmlInject(
     clientScript,
     configScript,
     toolbarAssets,
-    bareURL,
-    bareData,
     cookies,
     referrer,
     env,
@@ -281,13 +275,7 @@ export function createHtmlInject(
             childNodes: [
                 {
                     nodeName: '#text',
-                    value: createJsInject(
-                        bareURL,
-                        bareData,
-                        cookies,
-                        referrer,
-                        env
-                    ),
+                    value: createJsInject(cookies, referrer, env),
                 },
             ],
             attrs: [
@@ -451,5 +439,5 @@ export function isStyle(name) {
 }
 
 export function isSrcset(name) {
-    return name === 'srcset' || name === 'imagesrcset';
+    return name === 'srcSet' || name === 'srcset' || name === 'imagesrcset';
 }

@@ -3,7 +3,6 @@ import CSS from './css.js';
 import JS from './js.js';
 import setCookie from 'set-cookie-parser';
 import { xor, base64, plain } from './codecs.js';
-import * as mimeTypes from './mime.js';
 import {
     validateCookie,
     db,
@@ -23,7 +22,6 @@ import {
     createHtmlInject,
     createJsInject,
 } from './rewrite.html.js';
-import { importStyle, url } from './rewrite.css.js';
 //import { call, destructureDeclaration, dynamicImport, getProperty, importDeclaration, setProperty, sourceMethods, wrapEval, wrapIdentifier } from './rewrite.script.js';
 import {
     dynamicImport,
@@ -34,7 +32,7 @@ import {
     wrapEval,
 } from './rewrite.script.js';
 import { openDB } from 'idb';
-import { BareClient } from '@tomphttp/bare-client';
+import { BareClient } from '@mercuryworkshop/bare-mux';
 import EventEmitter from 'events';
 
 /**
@@ -161,9 +159,6 @@ class Ultraviolet {
         attributes(this);
         text(this);
         injectHead(this);
-        // CSS
-        url(this);
-        importStyle(this);
         // JS
         importDeclaration(this);
         dynamicImport(this);
@@ -191,7 +186,6 @@ class Ultraviolet {
         return this.js.source.bind(this.js);
     }
     static codec = { xor, base64, plain };
-    static mime = mimeTypes;
     static setCookie = setCookie;
     static openDB = openDB;
     static BareClient = BareClient;

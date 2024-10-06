@@ -9,12 +9,16 @@ importScripts('uv.bundle.js');
 importScripts('uv.config.js');
 importScripts(__uv$config.sw || 'uv.sw.js');
 
-const sw = new UVServiceWorker();
+const uv = new UVServiceWorker();
 
-self.addEventListener('fetch', (event) => event.respondWith(sw.fetch(event)));
-
-self.addEventListener('message', (event) => {
-    if (event.data === 'SKIP_WAITING') {
-        self.skipWaiting();
+async function handleRequest(event) {
+    if (uv.route(event)) {
+        return await uv.fetch(event);
     }
+    
+    return await fetch(event.request)
+}
+
+self.addEventListener('fetch', (event) => {
+    event.respondWith(handleRequest(event));
 });

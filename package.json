@@ -1,6 +1,6 @@
 {
     "name": "@fieron/ultraviolet-web-proxy",
-    "version": "2.1.1",
+    "version": "3.2.7",
     "description": "Highly sophisticated proxy used for evading internet censorship or accessing websites in a controlled sandbox using the power of service-workers and more!",
     "main": "lib/index.cjs",
     "license": "MIT",
@@ -18,18 +18,16 @@
     "scripts": {
         "build": "node build.js",
         "dev": "node build.js --dev",
-        "prepack": "npm run build"
+        "prepare": "npm run build"
     },
     "devDependencies": {
-        "@tomphttp/bare-client": "^2.2.0-alpha",
-        "css-tree": "^2.3.1",
+        "@mercuryworkshop/bare-mux": "^2.0.9",
+        "astring": "^1.8.6",
         "esbuild": "^0.18.11",
         "eslint": "^8.28.0",
-        "esotope-hammerhead": "^0.6.4",
         "events": "^3.3.0",
         "idb": "^7.1.1",
         "meriyah": "^4.3.7",
-        "mime-db": "^1.52.0",
         "parse5": "^7.1.2",
         "prettier": "^2.8.0",
         "rimraf": "^5.0.1",
