@@ -625,20 +625,19 @@ function __uvHook(window) {
                 return __uv.sourceUrl(target.call(that));
             },
             set: (target, that, [val]) => {
-                if (that.hasAttribute(that.__uv.ignoreAttr))
-                    target.call(that, val);
+                if (that.hasAttribute(that.__uv.ignoreAttr)) target.call(that, val);
                 else {
-                    if (
-                        new String(val).toString().trim().startsWith('blob:') &&
-                        that instanceof HTMLMediaElement
-                    ) {
-                        client.element.setAttribute.call(
-                            that,
-                            __uv.attributePrefix + '-attr-src',
-                            val
-                        );
-                        return target.call(that, __uv.blobUrls.get(val) || val);
-                    }
+				if (
+					new String(val).toString().trim().startsWith("blob:") &&
+					that instanceof HTMLMediaElement
+				) {
+					client.element.setAttribute.call(
+						that,
+						__uv.attributePrefix + "-attr-src",
+						val
+					);
+					return target.call(that, __uv.blobUrls.get(val) || val);
+				}
 
 				client.element.setAttribute.call(
 					that,
@@ -646,6 +645,7 @@ function __uvHook(window) {
 					val
 				);
 				target.call(that, __uv.rewriteUrl(val));
+            }
 			},
 		}
 	);
