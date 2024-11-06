@@ -1,39 +1,39 @@
-import HTML from './html.js';
-import CSS from './css.js';
-import JS from './js.js';
-import setCookie from 'set-cookie-parser';
-import { xor, base64, plain } from './codecs.js';
+import HTML from "./html.js";
+import CSS from "./css.js";
+import JS from "./js.js";
+import setCookie from "set-cookie-parser";
+import { xor, base64, plain } from "./codecs.js";
 import {
-    validateCookie,
-    db,
-    getCookies,
-    setCookies,
-    serialize,
-} from './cookie.js';
+	validateCookie,
+	db,
+	getCookies,
+	setCookies,
+	serialize,
+} from "./cookie.js";
 import {
-    attributes,
-    isUrl,
-    isForbidden,
-    isHtml,
-    isSrcset,
-    isStyle,
-    text,
-    injectHead,
-    createHtmlInject,
-    createJsInject,
-} from './rewrite.html.js';
+	attributes,
+	isUrl,
+	isForbidden,
+	isHtml,
+	isSrcset,
+	isStyle,
+	text,
+	injectHead,
+	createHtmlInject,
+	createJsInject,
+} from "./rewrite.html.js";
 //import { call, destructureDeclaration, dynamicImport, getProperty, importDeclaration, setProperty, sourceMethods, wrapEval, wrapIdentifier } from './rewrite.script.js';
 import {
-    dynamicImport,
-    identifier,
-    importDeclaration,
-    property,
-    unwrap,
-    wrapEval,
-} from './rewrite.script.js';
-import { openDB } from 'idb';
-import { BareClient } from '@mercuryworkshop/bare-mux';
-import EventEmitter from 'events';
+	dynamicImport,
+	identifier,
+	importDeclaration,
+	property,
+	unwrap,
+	wrapEval,
+} from "./rewrite.script.js";
+import { openDB } from "idb";
+import { BareClient } from "@mercuryworkshop/bare-mux";
+import EventEmitter from "events";
 
 /**
  * @typedef {import('../uv.js').UVConfig} UVConfig
@@ -117,80 +117,72 @@ class Ultraviolet {
         str = new String(str).trim();
         if (!str || this.urlRegex.test(str)) return str;
 
-        if (str.startsWith('javascript:')) {
-            return (
-                'javascript:' + this.js.rewrite(str.slice('javascript:'.length))
-            );
-        }
+		if (str.startsWith("javascript:")) {
+			return "javascript:" + this.js.rewrite(str.slice("javascript:".length));
+		}
 
-        try {
-            return (
-                meta.origin +
-                this.prefix +
-                this.encodeUrl(new URL(str, meta.base).href)
-            );
-        } catch (e) {
-            return meta.origin + this.prefix + this.encodeUrl(str);
-        }
-    }
-    sourceUrl(str, meta = this.meta) {
-        if (!str || this.urlRegex.test(str)) return str;
-        try {
-            return new URL(
-                this.decodeUrl(
-                    str.slice(this.prefix.length + meta.origin.length)
-                ),
-                meta.base
-            ).href;
-        } catch (e) {
-            return this.decodeUrl(
-                str.slice(this.prefix.length + meta.origin.length)
-            );
-        }
-    }
-    encodeUrl(str) {
-        return encodeURIComponent(str);
-    }
-    decodeUrl(str) {
-        return decodeURIComponent(str);
-    }
-    implementUVMiddleware() {
-        // HTML
-        attributes(this);
-        text(this);
-        injectHead(this);
-        // JS
-        importDeclaration(this);
-        dynamicImport(this);
-        property(this);
-        wrapEval(this);
-        identifier(this);
-        unwrap(this);
-    }
-    get rewriteHtml() {
-        return this.html.rewrite.bind(this.html);
-    }
-    get sourceHtml() {
-        return this.html.source.bind(this.html);
-    }
-    get rewriteCSS() {
-        return this.css.rewrite.bind(this.css);
-    }
-    get sourceCSS() {
-        return this.css.source.bind(this.css);
-    }
-    get rewriteJS() {
-        return this.js.rewrite.bind(this.js);
-    }
-    get sourceJS() {
-        return this.js.source.bind(this.js);
-    }
-    static codec = { xor, base64, plain };
-    static setCookie = setCookie;
-    static openDB = openDB;
-    static BareClient = BareClient;
-    static EventEmitter = EventEmitter;
+		try {
+			return (
+				meta.origin + this.prefix + this.encodeUrl(new URL(str, meta.base).href)
+			);
+		} catch (e) {
+			return meta.origin + this.prefix + this.encodeUrl(str);
+		}
+	}
+	sourceUrl(str, meta = this.meta) {
+		if (!str || this.urlRegex.test(str)) return str;
+		try {
+			return new URL(
+				this.decodeUrl(str.slice(this.prefix.length + meta.origin.length)),
+				meta.base
+			).href;
+		} catch (e) {
+			return this.decodeUrl(str.slice(this.prefix.length + meta.origin.length));
+		}
+	}
+	encodeUrl(str) {
+		return encodeURIComponent(str);
+	}
+	decodeUrl(str) {
+		return decodeURIComponent(str);
+	}
+	implementUVMiddleware() {
+		// HTML
+		attributes(this);
+		text(this);
+		injectHead(this);
+		// JS
+		importDeclaration(this);
+		dynamicImport(this);
+		property(this);
+		wrapEval(this);
+		identifier(this);
+		unwrap(this);
+	}
+	get rewriteHtml() {
+		return this.html.rewrite.bind(this.html);
+	}
+	get sourceHtml() {
+		return this.html.source.bind(this.html);
+	}
+	get rewriteCSS() {
+		return this.css.rewrite.bind(this.css);
+	}
+	get sourceCSS() {
+		return this.css.source.bind(this.css);
+	}
+	get rewriteJS() {
+		return this.js.rewrite.bind(this.js);
+	}
+	get sourceJS() {
+		return this.js.source.bind(this.js);
+	}
+	static codec = { xor, base64, plain };
+	static setCookie = setCookie;
+	static openDB = openDB;
+	static BareClient = BareClient;
+	static EventEmitter = EventEmitter;
 }
 
 export default Ultraviolet;
-if (typeof self === 'object') self.Ultraviolet = Ultraviolet;
+if (typeof self === "object") self.Ultraviolet = Ultraviolet;
