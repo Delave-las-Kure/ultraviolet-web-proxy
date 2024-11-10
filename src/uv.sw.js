@@ -265,8 +265,11 @@ class UVServiceWorker extends Ultraviolet.EventEmitter {
 									ultraviolet.bundleScript,
 									ultraviolet.clientScript,
 									ultraviolet.configScript,
+									ultraviolet.toolbarAssets,
 									ultraviolet.cookie.serialize(cookies, ultraviolet.meta, true),
-									request.referrer
+									request.referrer,
+									ultraviolet.env,
+									ultraviolet.metrics,
 								),
 							});
 						}
